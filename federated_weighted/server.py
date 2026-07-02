@@ -192,7 +192,6 @@ class LanguageWeightedFedAvg(FedAvg):
         model.save_pretrained(save_dir)
 
         from transformers import AutoTokenizer
-        import os
 
         # Load tokenizer locally if any checkpoint exists, to avoid a network call.
         # Falls back to model name only on the very first checkpoint save (round 1)
@@ -207,6 +206,8 @@ class LanguageWeightedFedAvg(FedAvg):
             tokenizer_source,
             local_files_only=bool(existing),
         )
+
+        tokenizer.save_pretrained(save_dir)
 
         print(f"[server] Saved weighted checkpoint to {save_dir}")
 
