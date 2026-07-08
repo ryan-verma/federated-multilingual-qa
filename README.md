@@ -19,7 +19,7 @@ The project investigates trade-offs between centralized and federated training a
 
 ## Technologies Used
 
-- Python 3.10
+- Python 3.12
 - PyTorch 2.11.0
 - Hugging Face Transformers 4.52.4
 - Hugging Face Datasets 3.6.0
