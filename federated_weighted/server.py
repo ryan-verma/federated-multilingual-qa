@@ -192,7 +192,21 @@ class LanguageWeightedFedAvg(FedAvg):
         model.save_pretrained(save_dir)
 
         from transformers import AutoTokenizer
-        tokenizer = AutoTokenizer.from_pretrained(model_utils.MODEL_NAME)
+
+        # Load tokenizer locally if any checkpoint exists, to avoid a network call.
+        # Falls back to model name only on the very first checkpoint save (round 1)
+        # when no prior checkpoint folder exists yet.
+        existing = [
+            f"{OUTPUT_ROOT}/checkpoint-round-{i}"
+            for i in range(1, absolute_round)
+            if os.path.isdir(f"{OUTPUT_ROOT}/checkpoint-round-{i}")
+        ]
+        tokenizer_source = existing[0] if existing else model_utils.MODEL_NAME
+        tokenizer = AutoTokenizer.from_pretrained(
+            tokenizer_source,
+            local_files_only=bool(existing),
+        )
+
         tokenizer.save_pretrained(save_dir)
 
         print(f"[server] Saved weighted checkpoint to {save_dir}")

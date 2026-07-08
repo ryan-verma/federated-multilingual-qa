@@ -10,7 +10,7 @@ from transformers import (
     Trainer,
 )
 
-from evaluation.preprocess_eval import (
+from evaluation.preprocess_mlqa import (
     preprocess_validation_examples,
 )
 
@@ -22,7 +22,7 @@ from evaluation.cjk_metrics import (
     compute_cjk_metrics,
 )
 
-MODEL_PATH = "outputs/centralized/final_model"
+MODEL_PATH = "outputs/fl_dp/raw_xlmr/global/final_model"
 
 EVAL_CONFIGS = {
     "en": "mlqa.en.en",
@@ -137,7 +137,7 @@ def evaluate_language(lang, config):
 def main():
 
     os.makedirs(
-        "results/centralized",
+        "results/dp",
         exist_ok=True,
     )
 
@@ -153,7 +153,7 @@ def main():
         all_results[lang] = results
 
     with open(
-        "results/centralized/metrics.json",
+        "results/dp/metrics.json",
         "w",
         encoding="utf-8",
     ) as f:
